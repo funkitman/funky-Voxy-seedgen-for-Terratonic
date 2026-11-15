@@ -1,0 +1,13 @@
+/work/
+/output/
+.gradle/
+**/build/
+__pycache__/
+*.pyc
+*.jar
+*.zip
+*.mrpack
+.minecraft/
+config/
+logs/
+*.log
