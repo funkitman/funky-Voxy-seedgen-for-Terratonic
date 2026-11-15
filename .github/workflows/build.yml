@@ -1,0 +1,60 @@
+name: Build Funky Seedgen Terratonic MC26.3
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Funky patch repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Fetch pinned MIT Seedgen upstream
+        run: |
+          git clone --filter=blob:none https://github.com/lyuwenhan/minecraft-java-edition-mods.git work/upstream
+          git -C work/upstream checkout --detach 764038d59d09f892e3d09d62a37a512aa09f2bdf
+
+      - name: Apply Funky Terratonic patch
+        run: |
+          python3 apply_funky_terratonic.py work/upstream/seedgen --dry-run
+          python3 apply_funky_terratonic.py work/upstream/seedgen
+          cp LICENSE work/upstream/seedgen/src/main/resources/LICENSE
+          cp ATTRIBUTION.md work/upstream/seedgen/src/main/resources/ATTRIBUTION.md
+
+      - name: Gradle compile and package
+        working-directory: work/upstream/seedgen
+        run: bash ../gradlew --no-daemon build --stacktrace
+
+      - name: Check compiled release contents
+        run: |
+          ls -lah work/upstream/seedgen/build/libs/
+          FILE=$(find work/upstream/seedgen/build/libs -name '*funky-terratonic*.jar' ! -name '*sources*' ! -name '*dev*' | head -1)
+          test -s "$FILE"
+          jar tf "$FILE" | grep -q 'LICENSE'
+          jar tf "$FILE" | grep -q 'ATTRIBUTION.md'
+          echo "FILE=$FILE" >> "$GITHUB_ENV"
+
+      - name: Upload runnable test JAR with legal notices
+        uses: actions/upload-artifact@v4
+        with:
+          name: Funky-Seedgen-Terratonic-MC26.3-TEST
+          path: |
+            ${{ env.FILE }}
+            LICENSE
+            ATTRIBUTION.md
+            THIRD_PARTY_NOTICES.md
+          if-no-files-found: error
+          retention-days: 30
