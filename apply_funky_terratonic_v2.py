@@ -102,6 +102,12 @@ def once(s: str, original: str, replacement: str, name: str) -> str:
         raise ValueError(f'{name}: expected 1 target, found {found}')
     return s.replace(original,replacement,1)
 
+def first_of_two(s: str, original: str, replacement: str, name: str) -> str:
+    found = s.count(original)
+    if found != 2:
+        raise ValueError(f'{name}: expected 2 occurrences, found {found}')
+    return s.replace(original, replacement, 1)
+
 def changed(root: Path) -> dict[Path,str]:
     path=lambda s:root/s
     cfg=path('src/main/java/com/example/seedgen/SeedgenConfig.java')
@@ -202,7 +208,7 @@ def changed(root: Path) -> dict[Path,str]:
         '\t\t\t\treturn;\n'
         '\t\t\t}',
         'region queue protected zone check')
-    c[service]=once(c[service],
+    c[service]=first_of_two(c[service],
         '\t\tif (!forcedRetry && owner.receiver.hasData(owner.context.height, chunkX, chunkZ)) {',
         '\t\tif (FunkyTerratonicZone.isProtected(owner.level.dimension(), chunkX, chunkZ)) {\n'
         '\t\t\treturn true;\n'
