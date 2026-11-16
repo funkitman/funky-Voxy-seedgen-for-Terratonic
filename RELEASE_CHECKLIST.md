@@ -5,10 +5,10 @@
 - [x] Separate third-party redistribution policies documented.
 - [x] Do not bundle Terralith/Terratonic or Minecraft/Voxy assets.
 - [x] Build script embeds MIT LICENSE and attribution in the JAR.
-- [ ] Compile with JDK 25 and confirm on Minecraft 26.3 / Fabric 0.19.5+.
-- [ ] Inspect JAR (`jar tf ... | grep -E 'LICENSE|ATTRIBUTION'`).
-- [ ] Run singleplayer and SunDroneSMP multiplayer smoke tests.
+- [x] Java 25 / Minecraft 26.3 compilation passed in GitHub Actions; runtime Fabric behavior unverified.
+- [x] Inspect v2 JAR: LICENSE, ATTRIBUTION.md, and FunkyTerratonicZone.class found.
+- [ ] Run v2 smoke test in a cloned Prism instance on SunDroneSMP; verify original spawn X/Z, both exact server datapacks, and tag registry loading.
 - [ ] Verify generated LOD against real server terrain, matching seed and pack versions.
-- [ ] Produce downloadable compiled JAR + legal notices **only after build**.
+- [x] Produce downloadable *experimental test* JAR + legal notices from successful GitHub Actions build (not a verified stable release).
 - [ ] Mark first release EXPERIMENTAL unless compatibility is confirmed.
 - [ ] Set GitHub repo visibility to Public manually in Settings → Danger Zone.
