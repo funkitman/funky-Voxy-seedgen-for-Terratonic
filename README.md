@@ -4,6 +4,10 @@
 
 An unofficial modification of **Seedgen 1.2.10** by [lyuwenhan](https://github.com/lyuwenhan/minecraft-java-edition-mods/tree/main/seedgen), originally licensed under **MIT**. This project is distinct from MobiusMeansBusiness's Voxy SeedGen and Voxygen 3.
 
+## AI development disclosure
+
+**All Funky-specific changes in this repository have been created using artificial intelligence (AI) tools, under the direction of `funkitman`.** This includes source-code patches, configuration changes, build scripts, and documentation. The disclosure applies to changes made to this fork, **not** to the original Seedgen code authored by lyuwenhan. AI-generated changes require independent testing; a successful compile does not establish correct in-game behavior.
+
 ## Purpose
 
 Create distant Voxy LOD from known world seed and the *same* Terralith + Terratonic worldgen datapacks used by a server. The experimental modification aims to load an isolated local datapack stack in vanilla → Terralith → Terratonic priority and preserve Terratonic noise settings instead of substituting vanilla terrain.
