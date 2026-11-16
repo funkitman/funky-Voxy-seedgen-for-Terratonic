@@ -1,4 +1,4 @@
-name: Build Funky Seedgen Terratonic MC26.3
+name: Build Funky Seedgen Terratonic MC26.3 v2
 
 on:
   push:
@@ -31,6 +31,8 @@ jobs:
         run: |
           python3 apply_funky_terratonic.py work/upstream/seedgen --dry-run
           python3 apply_funky_terratonic.py work/upstream/seedgen
+          python3 apply_funky_terratonic_v2.py work/upstream/seedgen --dry-run
+          python3 apply_funky_terratonic_v2.py work/upstream/seedgen
           cp LICENSE work/upstream/seedgen/src/main/resources/LICENSE
           cp ATTRIBUTION.md work/upstream/seedgen/src/main/resources/ATTRIBUTION.md
 
@@ -45,12 +47,13 @@ jobs:
           test -s "$FILE"
           jar tf "$FILE" | grep -q 'LICENSE'
           jar tf "$FILE" | grep -q 'ATTRIBUTION.md'
+          jar tf "$FILE" | grep -q 'FunkyTerratonicZone.class'
           echo "FILE=$FILE" >> "$GITHUB_ENV"
 
       - name: Upload runnable test JAR with legal notices
         uses: actions/upload-artifact@v4
         with:
-          name: Funky-Seedgen-Terratonic-MC26.3-TEST
+          name: Funky-Seedgen-Terratonic-MC26.3-v2-TEST
           path: |
             ${{ env.FILE }}
             LICENSE
