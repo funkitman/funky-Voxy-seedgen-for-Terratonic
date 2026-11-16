@@ -21,6 +21,8 @@ git clone https://github.com/lyuwenhan/minecraft-java-edition-mods.git "$WORK_DI
 git -C "$WORK_DIR/upstream" checkout --detach "$COMMIT"
 python3 "$BASE_DIR/apply_funky_terratonic.py" "$WORK_DIR/upstream/seedgen" --dry-run
 python3 "$BASE_DIR/apply_funky_terratonic.py" "$WORK_DIR/upstream/seedgen"
+python3 "$BASE_DIR/apply_funky_terratonic_v2.py" "$WORK_DIR/upstream/seedgen" --dry-run
+python3 "$BASE_DIR/apply_funky_terratonic_v2.py" "$WORK_DIR/upstream/seedgen"
 # Preserve MIT license and upstream/Funky attribution inside the built JAR.
 cp "$BASE_DIR/LICENSE" "$WORK_DIR/upstream/seedgen/src/main/resources/LICENSE"
 cp "$BASE_DIR/ATTRIBUTION.md" "$WORK_DIR/upstream/seedgen/src/main/resources/ATTRIBUTION.md"
