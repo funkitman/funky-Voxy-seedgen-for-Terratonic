@@ -33,6 +33,8 @@
 5. Put the **exact server-version** datapacks in `minecraft/config/funky-seedgen/packs/` as `01-terralith.zip` and `02-terratonic.zip`. Both are user-supplied, **never bundled** for licensing reasons.
 6. Connect to SunDroneSMP, enter `/seedgen seed`, `/seedgen on`, and `/seedgen status`. Test first near the outside boundary with radius 16 and threads 4.
 
+**SunDroneSMP GitHub inventory (may not equal deployed server):** `datapacks/Terralith_v2.6.5+26.3.zip` and `datapacks/terratonic-datapack-3.0.31.zip`. Copy the **deployed** files exactly before renaming for the local loader. Check the server's actual active `/datapack list` and files; archive names alone do not prove they are enabled.
+
 **CAUTION about mod vs datapack:** If the server uses the **Terralith 2.6+ Fabric mod + Tectonic Fabric mod**, the standalone datapacks are **not guaranteed identical** to its active worldgen. Both versions need explicit comparison; same Minecraft version and seed are not enough. v3's safeguard only confirms Terralith biomes are *present in the local generator*, not that all worldgen/trees match the server.
 
 ## What's new in v3
@@ -40,19 +42,28 @@
 - **Version/name:** `funkyGenSunDroneSmp-v3-MC26.3-Fabric.jar`. Keeps `fabric.mod.json` ID `seedgen` to preserve config/command compatibility.
 - **Biome safety:** Abort local Overworld worldgen if the datapack-based biome source contains zero `terralith:` biomes. The log says `SAFE STOP` instead of writing vanilla LOD with wrong biome types.
 - **Pack auditing:** Log SHA-256 and byte length for both local worldgen ZIPs. Compare with the **exact server worldgen resources**, where applicable.
-- **VoxyServer diagnostic:** `/seedgen status` and the log show whether the **VoxyServer client mod is installed**, but **cannot prove that the server completed a handshake or streamed any sections**.
+- **LOD transport diagnostic:** `/seedgen status` and the log detect **VoxyServer or Voxy Server Side/LSS client mods**, but **cannot prove that the server completed a handshake or streamed any sections**.
 - **v2 behavior retained:** protected vanilla 10,000-block circle, block tag preload and client-only integration.
 
-## Why Voxy Server might not stream
+## Why Voxy Server / Voxy Server Side may not stream
 
-1. An earlier user's Prism log listed `VoxyServer-1.2.5-36.3.jar` as **disabled**. Recheck that it is enabled **now**. Same version in the folder is not sufficient.
-2. Check the same correct `VoxyServer` build plus Voxy and Sodium are installed and enabled on the Fabric server. A client must have the `voxyserver` mod in addition to `voxy`.
-3. In client `minecraft/config/voxyserver-client.json`, inspect the effective **default and per-server** profile. Enable LOD Streaming in the mod's ModMenu UI; address matching is keyed by host:port.
-4. On the **server console**, check `/voxyserver stats` and `/voxyserver import existing status` if supported by the installed build. If previously generated vanilla regions were never imported, run `/voxyserver import existing current` while monitoring TPS and resource use; this reads the region files and can be expensive for a 10,000-block radius world. Do not wipe the existing Voxy DB.
-5. Check server config `config/voxyserver.json` for `lodStreamRadius`, `maxSectionsPerTickPerPlayer`, streaming state, and any client-connection warnings.
-6. If VoxyClient has stale/incorrect v1/v2 sections already cached, v3 will usually **skip existing LOD**; back up client cache and compare a fresh isolated test profile before deleting anything.
+**Critical two-project distinction:** The SunDroneSMP GitHub repo includes `mods/voxy-server-side-fabric.jar` (Voxy Server Side / VSS), while an earlier Prism log had `VoxyServer-1.2.5-36.3.jar` marked **disabled**. These are **different projects with different client/server network protocols**. The repository file list is not proof of what is currently deployed.
 
-These Voxy Server checks are **separate** from Seedgen code: v3 does **not** implement Voxy Server's networking stack.
+If the live server uses **Voxy Server Side** (XANTHA / VSS):
+1. Install the same 26.3 **Voxy Server Side** Fabric mod on the client, alongside Voxy. Disable the unrelated **VoxyServer** jar in the test profile to avoid confusion.
+2. Verify `minecraft/config/vss-client-config.json` (client) and `config/vss-server-config.json` (server). LOD streaming must be enabled on both.
+3. Try `/vss diag` on the client and `/vsslod stats` or `/vsslod diag` on the server **where supported by that exact build**, to check handshake and transfer activity. The official [VSS documentation](https://modrinth.com/mod/voxy-server-side) also documents `/vss clearcache`, but **back up data first and do not clear the cache as the first test**.
+
+If the live server instead uses **VoxyServer** (PooSmacker):
+1. Install the matching `VoxyServer-1.2.5-36.3.jar` on **both sides** and ensure it is enabled; previous client log showed it was disabled.
+2. Check `minecraft/config/voxyserver-client.json` on the client and `config/voxyserver.json` on the server (per-server host:port profile matters).
+3. Verify `/voxyserver stats` and `/voxyserver import existing status`. Where the server database has no pregenerated chunks, `/voxyserver import existing current` can populate it, but **schedule for low TPS load, monitor resources, and do not delete the DB**.
+
+Use **one matching transport system** on both sides. Simply matching a numeric version between different projects cannot make their protocols communicate.
+
+V3 looks for Fabric mod IDs `voxyserver`, `vss`, and `lss`; this only detects installed clients, **not active networking, handshake, server storage or data arrival**.
+
+If Voxy already has stale/incorrect v1/v2 chunks, v3 will skip existing LOD. Use an isolated test profile/cache and compare before making any destructive cache changes.
 
 ## Log lines for analysis
 
