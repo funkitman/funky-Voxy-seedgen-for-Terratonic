@@ -23,13 +23,15 @@ python3 "$BASE_DIR/apply_funky_terratonic.py" "$WORK_DIR/upstream/seedgen" --dry
 python3 "$BASE_DIR/apply_funky_terratonic.py" "$WORK_DIR/upstream/seedgen"
 python3 "$BASE_DIR/apply_funky_terratonic_v2.py" "$WORK_DIR/upstream/seedgen" --dry-run
 python3 "$BASE_DIR/apply_funky_terratonic_v2.py" "$WORK_DIR/upstream/seedgen"
+python3 "$BASE_DIR/apply_funkyGenSunDroneSmp_v3.py" "$WORK_DIR/upstream/seedgen" --dry-run
+python3 "$BASE_DIR/apply_funkyGenSunDroneSmp_v3.py" "$WORK_DIR/upstream/seedgen"
 # Preserve MIT license and upstream/Funky attribution inside the built JAR.
 cp "$BASE_DIR/LICENSE" "$WORK_DIR/upstream/seedgen/src/main/resources/LICENSE"
 cp "$BASE_DIR/ATTRIBUTION.md" "$WORK_DIR/upstream/seedgen/src/main/resources/ATTRIBUTION.md"
 cd "$WORK_DIR/upstream/seedgen"
 ../gradlew --no-daemon build
 mkdir -p "$BASE_DIR/output"
-cp -v build/libs/*funky-terratonic*.jar "$BASE_DIR/output/"
+cp -v build/libs/*funkyGenSunDroneSmp*.jar "$BASE_DIR/output/"
 cp "$BASE_DIR/LICENSE" "$BASE_DIR/output/LICENSE"
 cp "$BASE_DIR/ATTRIBUTION.md" "$BASE_DIR/output/ATTRIBUTION.md"
 cp "$BASE_DIR/THIRD_PARTY_NOTICES.md" "$BASE_DIR/output/THIRD_PARTY_NOTICES.md"
