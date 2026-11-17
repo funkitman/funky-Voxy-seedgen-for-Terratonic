@@ -1,4 +1,4 @@
-name: Build Funky Seedgen Terratonic MC26.3 v2
+name: Build funkyGenSunDroneSmp v3 Minecraft 26.3
 
 on:
   push:
@@ -33,6 +33,8 @@ jobs:
           python3 apply_funky_terratonic.py work/upstream/seedgen
           python3 apply_funky_terratonic_v2.py work/upstream/seedgen --dry-run
           python3 apply_funky_terratonic_v2.py work/upstream/seedgen
+          python3 apply_funkyGenSunDroneSmp_v3.py work/upstream/seedgen --dry-run
+          python3 apply_funkyGenSunDroneSmp_v3.py work/upstream/seedgen
           cp LICENSE work/upstream/seedgen/src/main/resources/LICENSE
           cp ATTRIBUTION.md work/upstream/seedgen/src/main/resources/ATTRIBUTION.md
 
@@ -43,17 +45,20 @@ jobs:
       - name: Check compiled release contents
         run: |
           ls -lah work/upstream/seedgen/build/libs/
-          FILE=$(find work/upstream/seedgen/build/libs -name '*funky-terratonic*.jar' ! -name '*sources*' ! -name '*dev*' | head -1)
+          FILE=$(find work/upstream/seedgen/build/libs -name '*funkyGenSunDroneSmp*.jar' ! -name '*sources*' ! -name '*dev*' | head -1)
           test -s "$FILE"
           jar tf "$FILE" | grep -q 'LICENSE'
           jar tf "$FILE" | grep -q 'ATTRIBUTION.md'
           jar tf "$FILE" | grep -q 'FunkyTerratonicZone.class'
-          echo "FILE=$FILE" >> "$GITHUB_ENV"
+          jar tf "$FILE" | grep -q 'FunkyTerratonicPacks.class'
+          mkdir -p release
+          cp "$FILE" release/funkyGenSunDroneSmp-v3-MC26.3-Fabric.jar
+          echo "FILE=release/funkyGenSunDroneSmp-v3-MC26.3-Fabric.jar" >> "$GITHUB_ENV"
 
       - name: Upload runnable test JAR with legal notices
         uses: actions/upload-artifact@v4
         with:
-          name: Funky-Seedgen-Terratonic-MC26.3-v2-TEST
+          name: funkyGenSunDroneSmp-v3-MC26.3-Fabric-TEST
           path: |
             ${{ env.FILE }}
             LICENSE
