@@ -1,6 +1,6 @@
-# Funky Voxy Seedgen for Terratonic (Minecraft 26.3)
+# funkyGenSunDroneSmp (Minecraft 26.3 / Fabric)
 
-**Funky v2: compiled on GitHub Actions for Minecraft 26.3 / Java 25. Still experimental and NOT runtime-verified on SunDroneSMP.**
+**v3 (2026-11-17): AI-developed experimental test build, compiled with Java 25. v2 ran on SunDroneSMP, but Terratonic biomes/trees and server LOD streaming are not yet verified.**
 
 An unofficial modification of **Seedgen 1.2.10** by [lyuwenhan](https://github.com/lyuwenhan/minecraft-java-edition-mods/tree/main/seedgen), originally licensed under **MIT**. This project is distinct from MobiusMeansBusiness's Voxy SeedGen and Voxygen 3.
 
@@ -12,7 +12,7 @@ An unofficial modification of **Seedgen 1.2.10** by [lyuwenhan](https://github.c
 
 Create distant Voxy LOD from known world seed and the *same* Terralith + Terratonic worldgen datapacks used by a server. The experimental modification aims to load an isolated local datapack stack in vanilla → Terralith → Terratonic priority and preserve Terratonic noise settings instead of substituting vanilla terrain.
 
-**Build verified**: Minecraft 26.3 and Java 25 compile successfully. Terratonic multiplayer generation and accuracy have NOT been verified. Do not install in your only Prism instance.
+**Build verified**: Java 25 and Minecraft 26.3 compile successfully. A passing build does NOT prove correct modded biome/feature generation or the server's LOD transport protocol. Test only in a cloned Prism instance.
 
 ## Build
 
@@ -23,7 +23,7 @@ chmod +x build_on_linux.sh
 ./build_on_linux.sh
 ```
 
-The script retrieves **upstream commit `764038d59d09f892e3d09d62a37a512aa09f2bdf`**, tests and applies the Funky patch and attempts a Gradle build. The output directory should contain the experimental JAR and attribution/license files. The v2 patch **has been compiled on GitHub Actions**, but is not validated in multiplayer.
+The script retrieves **upstream commit `764038d59d09f892e3d09d62a37a512aa09f2bdf`**, tests and applies the Funky patch and attempts a Gradle build. The output directory should contain the experimental JAR and attribution/license files. The v3 patch **is compiled on GitHub Actions**, but Terratonic worldgen and server LOD transport still require in-game validation.
 
 ## Local packs (NOT included)
 
@@ -53,3 +53,13 @@ This is an unofficial community derivative, **not endorsed or maintained by the 
 v2 adds 10,000-block vanilla-zone protection (circle from configured original spawn coordinates), excludes that area from local Seedgen output, loads static block tags before worldgen registries, and restricts custom Terratonic generation to the configured multiplayer server. Within the zone, Voxy Server provides LODs. **Verify the actual original pregeneration center before starting**; the default 0,0 is only an assumption.
 
 Read [v2 installation and testing instructions](docs/V2_TESTING.md) and get the compiled test JAR from [GitHub Actions](../../actions) (workflow artifact from a successful run). No Terralith/Terratonic datapacks are included.
+
+## v3: funkyGenSunDroneSmp
+
+Compiled JAR: **`funkyGenSunDroneSmp-v3-MC26.3-Fabric.jar`** (GitHub Actions artifact). v3 keeps the 10,000-block vanilla pregeneration exclusion and adds a **fail-closed check** requiring `terralith:` biomes in the Overworld biome source. It also prints SHA-256 of the exact local Terralith + Terratonic ZIPs for comparing with the server, and reports installed server LOD transport mods. None of these checks can by themselves guarantee exact tree placement; they prevent writing obviously vanilla-biome LOD as Terratonic.
+
+**Important Voxy streaming distinction:** The SunDroneSMP repository currently includes **`voxy-server-side-fabric.jar`** (Voxy Server Side / VSS), while an earlier Funky Ultimate Prism log showed **`VoxyServer-1.2.5-36.3.jar` disabled**. These are distinct mods/protocols; use the **same project** on client and server. If the deployed SunDroneSMP server mirrors this repo, install matching [Voxy Server Side](https://modrinth.com/mod/voxy-server-side) on the client and check `config/vss-client-config.json`, not VoxyServer settings. The v3 diagnostics detect VoxyServer or VSS/LSS clients but cannot prove handshake success.
+
+**Matching worldgen:** The SunDroneSMP repo `datapacks/` currently contains **`Terralith_v2.6.5+26.3.zip`** and **`terratonic-datapack-3.0.31.zip`**. Verify which files are actually active on the running server and copy those exact pack bytes to the client-configured local filenames. Terralith 2.6 mod and datapack variants are not interchangeable.
+
+For exact installation, limitations and troubleshooting, read [V3_TESTING.md](docs/V3_TESTING.md). AI-authorship disclosure remains in this README and [ATTRIBUTION.md](ATTRIBUTION.md). The original MIT license and lyuwenhan credit are preserved.
