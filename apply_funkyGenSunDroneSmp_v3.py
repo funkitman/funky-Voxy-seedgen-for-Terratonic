@@ -62,10 +62,12 @@ def patch(root: Path) -> dict[Path,str]:
     contents[k]=once(contents[k],
         '\t\tif (current == null) {\n\t\t\tcurrent =\n\t\t\t\t\tnew Session(',
         '\t\tif (current == null) {\n'
-        '\t\t\tif (FunkyTerratonicZone.active() && !FabricLoader.getInstance().isModLoaded("voxyserver")) {\n'
-        '\t\t\t\tLOGGER.warn("funkyGenSunDroneSmp v3: VoxyServer CLIENT mod not loaded! "\n'
-        '\t\t\t\t\t\t+ "Seedgen does not receive server LODs. Install matching VoxyServer on BOTH "\n'
-        '\t\t\t\t\t\t+ "sides, enable streaming, then import pre-generated chunks server-side.");\n'
+        '\t\t\tif (FunkyTerratonicZone.active()\n'\t\t\t\t&& !FabricLoader.getInstance().isModLoaded("voxyserver")\n'
+        '\t\t\t\t&& !FabricLoader.getInstance().isModLoaded("vss")\n'
+        '\t\t\t\t&& !FabricLoader.getInstance().isModLoaded("lss")) {\n'
+        '\t\t\t\tLOGGER.warn("funkyGenSunDroneSmp v3: no client LOD-streaming mod detected! "\n'
+        '\t\t\t\t\t\t+ "Install the SAME LOD project (VoxyServer or Voxy Server Side/LSS) on BOTH "\n'
+        '\t\t\t\t\t\t+ "sides and verify its network handshake. These two projects are NOT interchangeable.");\n'
         '\t\t\t}\n'
         '\t\t\tcurrent =\n\t\t\t\t\tnew Session(',
         'VoxyServer diagnostic on new session')
@@ -73,8 +75,8 @@ def patch(root: Path) -> dict[Path,str]:
     contents[k]=once(contents[k],
         '\t\t\t\t\t\t+ current.protectedVanilla.get()));',
         '\t\t\t\t\t\t+ current.protectedVanilla.get()))\n'
-        '\t\t\t\t.copy().append(Component.literal("\\nFunky v3: VoxyServer client " +\n'
-        '\t\t\t\t\t(FabricLoader.getInstance().isModLoaded("voxyserver") ? "mod loaded (handshake NOT checked)" : "NOT LOADED; server LOD will not stream")));',
+        '\t\t\t\t.copy().append(Component.literal("\\nFunky v3: LOD streaming client " +\n'
+        '\t\t\t\t\t(FabricLoader.getInstance().isModLoaded("voxyserver") ? "VoxyServer loaded (handshake unverified)"\n        '\t\t\t\t\t : (FabricLoader.getInstance().isModLoaded("vss") || FabricLoader.getInstance().isModLoaded("lss"))\n        '\t\t\t\t\t  ? "Voxy Server Side/LSS loaded (handshake unverified)"\n        '\t\t\t\t\t  : "NONE detected; check matching server mod"))));',
         'Funky status VoxyServer diagnostics')
 
     # Debug actual selected pack content using stable per-file SHA-256.
