@@ -80,7 +80,7 @@ def patch(root: Path) -> dict[Path,str]:
         '\t\t\t\t\t(FabricLoader.getInstance().isModLoaded("voxyserver") ? "VoxyServer loaded (handshake unverified)"\n'
         '\t\t\t\t\t : (FabricLoader.getInstance().isModLoaded("vss") || FabricLoader.getInstance().isModLoaded("lss"))\n'
         '\t\t\t\t\t  ? "Voxy Server Side/LSS loaded (handshake unverified)"\n'
-        '\t\t\t\t\t  : "NONE detected; check matching server mod"))));',
+        '\t\t\t\t\t  : "NONE detected; check matching server mod")));',
         'Funky status VoxyServer diagnostics')
 
     # Debug actual selected pack content using stable per-file SHA-256.
