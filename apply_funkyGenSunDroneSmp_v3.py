@@ -62,7 +62,8 @@ def patch(root: Path) -> dict[Path,str]:
     contents[k]=once(contents[k],
         '\t\tif (current == null) {\n\t\t\tcurrent =\n\t\t\t\t\tnew Session(',
         '\t\tif (current == null) {\n'
-        '\t\t\tif (FunkyTerratonicZone.active()\n'\t\t\t\t&& !FabricLoader.getInstance().isModLoaded("voxyserver")\n'
+        '\t\t\tif (FunkyTerratonicZone.active()\n'
+        '\t\t\t\t&& !FabricLoader.getInstance().isModLoaded("voxyserver")\n'
         '\t\t\t\t&& !FabricLoader.getInstance().isModLoaded("vss")\n'
         '\t\t\t\t&& !FabricLoader.getInstance().isModLoaded("lss")) {\n'
         '\t\t\t\tLOGGER.warn("funkyGenSunDroneSmp v3: no client LOD-streaming mod detected! "\n'
@@ -76,7 +77,10 @@ def patch(root: Path) -> dict[Path,str]:
         '\t\t\t\t\t\t+ current.protectedVanilla.get()));',
         '\t\t\t\t\t\t+ current.protectedVanilla.get()))\n'
         '\t\t\t\t.copy().append(Component.literal("\\nFunky v3: LOD streaming client " +\n'
-        '\t\t\t\t\t(FabricLoader.getInstance().isModLoaded("voxyserver") ? "VoxyServer loaded (handshake unverified)"\n        '\t\t\t\t\t : (FabricLoader.getInstance().isModLoaded("vss") || FabricLoader.getInstance().isModLoaded("lss"))\n        '\t\t\t\t\t  ? "Voxy Server Side/LSS loaded (handshake unverified)"\n        '\t\t\t\t\t  : "NONE detected; check matching server mod"))));',
+        '\t\t\t\t\t(FabricLoader.getInstance().isModLoaded("voxyserver") ? "VoxyServer loaded (handshake unverified)"\n'
+        '\t\t\t\t\t : (FabricLoader.getInstance().isModLoaded("vss") || FabricLoader.getInstance().isModLoaded("lss"))\n'
+        '\t\t\t\t\t  ? "Voxy Server Side/LSS loaded (handshake unverified)"\n'
+        '\t\t\t\t\t  : "NONE detected; check matching server mod"))));',
         'Funky status VoxyServer diagnostics')
 
     # Debug actual selected pack content using stable per-file SHA-256.
